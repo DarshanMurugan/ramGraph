@@ -1,0 +1,11 @@
+#Gradle
+
+.gradle/
+build/
+
+#VS Code
+.vscode/
+
+#macOS
+.DS_Store
+
