@@ -4,12 +4,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 
 import Graph.Graph;
-import Operations.modifyGraph;
-
-
-import java.util.concurrent.Callable;
-import picocli.CommandLine.ParentCommand;
-
+import Operations.modifyGraph; import java.util.concurrent.Callable; import picocli.CommandLine.ParentCommand;
 @Command(name= "modifyGraph", mixinStandardHelpOptions = true, version = "ramGraph 0.1.0",
     description = "Make changes to the existing graph like removing and adding nodes.",
     subcommands = {

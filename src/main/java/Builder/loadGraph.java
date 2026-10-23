@@ -3,6 +3,7 @@ package Builder;
 
 import Graph.Node;
 import Graph.Graph;
+import Graph.Edge;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -11,6 +12,8 @@ import com.opencsv.CSVReader;
 import java.io.FileReader;
 import java.util.List;
 import java.util.HashMap;
+
+import java.io.IOException;
 
 public class loadGraph {
   Graph graph;
@@ -25,40 +28,38 @@ public class loadGraph {
   }
 
   public Graph load() throws Exception {
-    List<Node> nodeArray = readNodes();
-    createGraph(graph,nodeArray);
-    buildConnections(graph);
-    return graph;
+    buildNodes();
+    buildEdges();
+    return this.graph;
   }
 
-  private List<Node> readNodes() throws Exception {
-    try (FileReader infoReader = new FileReader(this.infoFileName)) {
-      
-      List<Node> nodeArray =  new CsvToBeanBuilder<Node>(infoReader)
-              .withType(Node.class)
-              .withIgnoreLeadingWhiteSpace(true)
-              .build()
-              .parse();
-      return nodeArray;
+  private void buildNodes() throws Exception {
+    try (FileReader nodeReader = new FileReader(this.infoFileName)) {
+      CsvToBean<Node> csvToBean = new CsvToBeanBuilder<Node>(nodeReader)
+            .withType(Node.class)
+            .build();
+
+      csvToBean.stream().forEach(node -> {
+        this.graph.addNode(node);
+      });
+    } catch (IOException e) {
+        e.printStackTrace();
     }
   }
 
-  private void createGraph(Graph graph,List<Node> nodeArray) {
-      for (Node node:nodeArray) {
-        graph.addNode(node);
-      }
-  }
-
-  private void buildConnections(Graph graph) throws Exception {
-      // the connections readNodeser stores the id of the connections for every node and 
-      // the code below attaches the nodes to the connections array
-      try (CSVReader connectionsReader = new CSVReader(new FileReader(this.connectionsFileName))) {
-        String[] row;
-        while((row = connectionsReader.readNext()) != null){
-          // row[0] = id of a node and row[1]  = id of node that row[0] must connect to
-          graph.getNodeById(Integer.parseInt(row[0]))
-          .addConnection(graph.getNodeById(Integer.parseInt(row[1])));
-        }
+  private void buildEdges() throws Exception {
+      try (CSVReader edgeReader = new CSVReader(new FileReader(this.connectionsFileName))) {
+        CsvToBean<Edge> csvToBean = new CsvToBeanBuilder<Edge>(edgeReader)
+            .withType(Edge.class)
+            .build();
+        
+        csvToBean.stream().forEach(edge -> {
+          Node outgoingNode = this.graph.getNodeById(edge.getSourceId());
+          Node incomingNode = this.graph.getNodeById(edge.getTargetId());
+          
+          outgoingNode.addOutgoingEdge(edge);
+          incomingNode.addIncomingEdge(edge);
+      });
       }
   }
 }

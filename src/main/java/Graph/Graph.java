@@ -8,17 +8,13 @@ import java.util.ArrayList;
 
 public class Graph {
   private HashMap<Integer,Node> nodesById = new HashMap<>();
-  private HashMap<String,List<Integer>> nodesByName = new HashMap<>();
 
 
   public void addNode(Node node) {
     nodesById.put(node.getId(),node);
-    nodesByName.computeIfAbsent(node.getName(), k -> new ArrayList<>()).add(node.getId());
   }
 
   public void removeNode(int id) {
-    String name = nodesById.get(id).getName();
-    nodesByName.get(name).remove(Integer.valueOf(id));
     nodesById.remove(id);
   }
 
@@ -26,9 +22,6 @@ public class Graph {
     return nodesById.getOrDefault(id,null);
   }
 
-  public List<Integer> getIdByName(String name) {
-    return nodesByName.get(name);
-  }
 
   public int totalNodes(){
     return nodesById.size();
@@ -38,4 +31,10 @@ public class Graph {
   public boolean isLoaded(){
     return (!nodesById.isEmpty());
   }
+  
+  public List<Node> getGraphNodes() {
+    return new ArrayList<>(nodesById.values());
+  }
+
+  
 }

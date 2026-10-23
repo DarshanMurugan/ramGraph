@@ -10,8 +10,14 @@ import picocli.CommandLine;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+
 
 import java.util.concurrent.Callable;
+import java.util.Set;
+
+import Options.BFSOptions;
+import Options.BFSOptions.Direction;
 
 
 @Command(name= "bfs", mixinStandardHelpOptions = true, version = "ramGraph 0.1.0",
@@ -29,6 +35,16 @@ public class BFSCommand implements Callable<Integer> {
   @Parameters(index = "1", description = " The name/id of the node to find")
   private int targetId;
 
+  @Option(names={"--relation","-r"}, description= "define a specific relation type to search with",
+          defaultValue="", split=",")
+  private Set<String> relationType;
+
+  @Option(names={"--direction","-d"}, description="define direction, available values: ${COMPLETION-CANDIDATES} ", defaultValue="BOTH")
+  private Direction direction;
+
+  @Option(names={"--degree","-dg"}, description= "define a specific relation type to search with",defaultValue="2147483647")
+  private int degree;
+
   @Override
   public Integer call() throws Exception {
     if (!graph.isLoaded()) {
@@ -45,15 +61,20 @@ public class BFSCommand implements Callable<Integer> {
       System.out.println("Error: target Node does not exist.");
       return 1;
     }
-    BFSResult searchresult = (new BFS(graph.totalNodes())).search(graph.getNodeById(startId),graph.getNodeById(targetId));
+
+    BFSOptions modifier = new BFSOptions(relationType,degree,direction);
+    BFSResult searchresult = (new BFS(this.graph,this.graph.totalNodes(),modifier))
+                              .search(this.graph.getNodeById(startId),this.graph.getNodeById(targetId));
     if (searchresult == null) {
         System.out.println("Error: Node does not exist or is unreacheable.");
         return 1;
       }
-    System.out.println("ID: " + searchresult.getResult().getId() + " Age: "+ searchresult.getResult().getAge()+ " Name: " + searchresult.getResult().getName());
-    System.out.println("Distance travelled: " + searchresult.getTotalNodesVisited());
+    Node resultNode = searchresult.getResult();
+    resultNode.getProperties().forEach((key, value) -> System.out.println(key + ": " + value));
+    System.out.println("Total Nodes travelled: " + searchresult.getTotalNodesVisited());
+    System.out.println("Shortest Distance: " + (searchresult.getShortestPath().size() - 1));
     for (Node node: searchresult.getShortestPath()){
-      System.out.print(" -> " + node.getName());
+      System.out.print(" -> " + node.getId());
     }
     System.out.println();
     return 0;
