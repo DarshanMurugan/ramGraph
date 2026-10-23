@@ -16,7 +16,7 @@ public class modifyGraph {
   public void addConnection(int sourceNodeId,int connectNodeId) {
     Node sourceNode = graph.getNodeById(sourceNodeId);
     Node connectNode = graph.getNodeById(connectNodeId);
-    sourceNode.addConnection(connectNode);
+    // sourceNode.addOutgoingEdge(connectNode);
   }
 
 }
