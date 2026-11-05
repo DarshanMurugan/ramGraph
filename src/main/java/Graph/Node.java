@@ -47,8 +47,16 @@ public class Node {
     outgoing.add(edge);
   }
 
+  public void removeOutgoingEdge(Edge edge){
+    outgoing.remove(edge);
+  }
+
   public void addIncomingEdge(Edge edge) {
     incoming.add(edge);
+  }
+
+  public void removeIncomingEdge(Edge edge){
+    incoming.remove(edge);
   }
 
   public void setProperty(String key, Object value) {

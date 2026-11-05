@@ -74,7 +74,8 @@ public class BFSCommand implements Callable<Integer> {
     System.out.println("Total Nodes travelled: " + searchresult.getTotalNodesVisited());
     System.out.println("Shortest Distance: " + (searchresult.getShortestPath().size() - 1));
     for (Node node: searchresult.getShortestPath()){
-      System.out.print(" -> " + node.getId());
+       System.out.print(" -> ");
+       node.getProperties().forEach((key, value) -> System.out.println(key + ": " + value));
     }
     System.out.println();
     return 0;

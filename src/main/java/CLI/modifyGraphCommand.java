@@ -3,6 +3,9 @@ import picocli.CommandLine;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import Graph.Graph;
 import Operations.modifyGraph; import java.util.concurrent.Callable; import picocli.CommandLine.ParentCommand;
 @Command(name= "modifyGraph", mixinStandardHelpOptions = true, version = "ramGraph 0.1.0",
@@ -50,11 +53,17 @@ public class modifyGraphCommand implements Callable {
 
   @Command(name="connect", mixinStandardHelpOptions=true, description="add a connection(vertex) between two nodes.")
   static class connectNode implements Callable {
-    @Parameters(index="0",description="Id of the node to connect with.")
+    @Parameters(index="0",description="Id of the source node.")
     private int sourceNodeId;
 
-    @Parameters(index="1",description="Id of the node to connect to.")
-    private int connectNodeId;
+    @Parameters(index="1",description="Id of the target node.")
+    private int targetNodeId;
+
+    @Parameters(index="2",description="relation type of the edge connection.")
+    private String relation;
+
+    @Parameters(index="3",description="properties of the edge ")
+    private String properties;
 
     @ParentCommand
     private modifyGraphCommand parent; //picocli feature to get outer class constructor variables
@@ -65,11 +74,42 @@ public class modifyGraphCommand implements Callable {
         return 1;
       }
       
-      if (parent.graph.getNodeById(connectNodeId) == null) {
+      if (parent.graph.getNodeById(targetNodeId) == null) {
         System.out.println("Error: Specified connect Node does not exist");
       }
+      Map<String,Object> propMap = new HashMap<>(); 
+      String key = "";
+      String value = "";
+      boolean isValue = false;
+      for (char c : properties.toCharArray()) {
+          if (c == '=') {
+              isValue = true;
+              continue;
+          }
+          if (c == ';') {
+              if (value.matches("-?\\d+"))
+                  propMap.put(key, Integer.parseInt(value));
 
-      parent.modifygraph.addConnection(sourceNodeId,connectNodeId);
+              else if (value.matches("-?\\d+\\.\\d+"))
+                  propMap.put(key, Double.parseDouble(value));
+
+              else
+                  propMap.put(key, value);
+
+              key = "";
+              value = "";
+              isValue = false;
+              continue;
+          }
+          if (isValue)
+              value += c;
+          else
+              key += c;
+      }
+      
+
+
+      parent.modifygraph.addConnection(sourceNodeId,relation,targetNodeId,propMap);
 
       return 0;
 

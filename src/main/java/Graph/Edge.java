@@ -25,23 +25,34 @@ public class Edge {
   private Map<String,Object> properties;
   
 
+  //opencsv needs a no argument constructor therefore this, not meant to be used for creating an edge object.
+  public Edge(){};
+
+  public Edge(int sourceId,String relation, int targetId,Map<String,Object> properties){
+    this.sourceId = sourceId;
+    this.relation = relation;
+    this.targetId = targetId;
+    this.properties = properties;
+  }
+  
+
   public int getSourceId() {
-    return sourceId;  
+    return this.sourceId;  
   }
 
   public int getTargetId() {
-    return targetId;
+    return this.targetId;
   }
 
   public String getRelation() {
-    return relation;
+    return this.relation;
   }
   
   public Map<String,Object> getproperties() {
-    return properties;
+    return this.properties;
   }
 
   public Object getProperty(String key) {
-    return properties.getOrDefault(key,null);
+    return this.properties.getOrDefault(key,null);
   }
 }
