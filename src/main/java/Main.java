@@ -4,6 +4,7 @@ import CLI.loadCommand;
 import CLI.ramGraphCommand;
 import CLI.modifyGraphCommand;
 import CLI.exportCommand;
+import CLI.selectGraphCommand;
 import java.util.Scanner;
 
 import picocli.CommandLine;
@@ -21,6 +22,7 @@ public class Main {
     cmd.addSubcommand("load", new loadCommand(graph));
     cmd.addSubcommand("bfs", new BFSCommand(graph));
     cmd.addSubcommand("modifyGraph", new modifyGraphCommand(graph));
+    cmd.addSubcommand("selectGraph", new selectGraphCommand(graph));
     cmd.addSubcommand("export", new exportCommand(graph));
     Scanner scanner = new Scanner(System.in);
 
