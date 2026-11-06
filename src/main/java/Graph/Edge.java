@@ -48,7 +48,7 @@ public class Edge {
     return this.relation;
   }
   
-  public Map<String,Object> getproperties() {
+  public Map<String,Object> getProperties() {
     return this.properties;
   }
 
