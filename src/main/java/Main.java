@@ -1,10 +1,5 @@
 import Graph.Graph;
-import CLI.BFSCommand;
-import CLI.loadCommand;
-import CLI.ramGraphCommand;
-import CLI.modifyGraphCommand;
-import CLI.exportCommand;
-import CLI.selectGraphCommand;
+import CLI.*;
 import java.util.Scanner;
 
 import picocli.CommandLine;
@@ -24,6 +19,8 @@ public class Main {
     cmd.addSubcommand("modifyGraph", new modifyGraphCommand(graph));
     cmd.addSubcommand("selectGraph", new selectGraphCommand(graph));
     cmd.addSubcommand("export", new exportCommand(graph));
+    cmd.addSubcommand("import", new importCommand());
+    cmd.addSubcommand("community", new communityDetectionCommand(graph));
     Scanner scanner = new Scanner(System.in);
 
     while(true){

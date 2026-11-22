@@ -21,11 +21,12 @@ public class exportToJsonLD {
 
     // This acts as your JSON-LD @context
 private static final Map<String, Object> STATIC_HEADER = Map.of(
-        "@vocab", "http://schema.org/",
-        "id", Map.of("@id", "@id", "@type", "@id"),
-        "sourceId", Map.of("@id", "http://example.org/sourceId", "@type", "@id"),
-        "targetId", Map.of("@id", "http://example.org/targetId", "@type", "@id"),
-        "relation", "http://example.org/relation"
+       "ram","http://ramGraph.org/",
+       "source", Map.of("@id","ram:source", "@type","@id"),
+       "target", Map.of("@id","ram:target", "@type","@id"),
+       "realtion","ram:relation",
+       "@vocab", "ram:properties"
+    
     );
 
     public void export() {
@@ -38,8 +39,9 @@ private static final Map<String, Object> STATIC_HEADER = Map.of(
             // 1. Build a single container map for the entire JSON-LD payload
             Map<String, Object> jsonLdDocument = new LinkedHashMap<>();
             jsonLdDocument.put("@context", STATIC_HEADER);
-            jsonLdDocument.put("@graph", new ArrayList<>(graph.getGraphNodes()));
-
+            // jsonLdDocument.put("@graph", new ArrayList<>(graph.getGraphNodes()));
+            List<Node> nodes = graph.getGraphNodes();
+            
             // 2. Serialize the entire structure ONCE
             String json = mapper.writeValueAsString(jsonLdDocument);
             

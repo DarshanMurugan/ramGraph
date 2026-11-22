@@ -5,6 +5,10 @@ import Graph.Node;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+
+import java.util.Collections;
+
 
 public class Graph {
   private HashMap<Integer,Node> nodesById = new HashMap<>();
@@ -33,7 +37,11 @@ public class Graph {
   }
   
   public List<Node> getGraphNodes() {
-    return new ArrayList<>(nodesById.values());
+    return new ArrayList(nodesById.values());
+  }
+
+  public Set<Integer> getGraphIds() {
+    return Collections.unmodifiableSet(nodesById.keySet());
   }
 
   
