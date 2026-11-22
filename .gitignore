@@ -9,3 +9,7 @@ build/
 #macOS
 .DS_Store
 
+#datasets
+facebook/
+Data/nodes.csv
+Data/edges.csv
