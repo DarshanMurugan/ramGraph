@@ -21,7 +21,9 @@ public class Main {
     cmd.addSubcommand("export", new exportCommand(graph));
     cmd.addSubcommand("import", new importCommand());
     cmd.addSubcommand("community", new communityDetectionCommand(graph));
+    cmd.addSubcommand("popularNodes", new popularNodesCommand(graph));
     Scanner scanner = new Scanner(System.in);
+
 
     while(true){
       System.out.print("ramGraph>");

@@ -38,8 +38,16 @@ public class Node {
     return  Collections.unmodifiableList(outgoing);
   }
 
+  public int getNoOfOutgoing() {
+    return outgoing.size();
+  }
+
   public List<Edge> getIncoming() {
     return Collections.unmodifiableList(incoming);
+  }
+
+  public int getNoOfIncoming() {
+    return incoming.size();
   }
 
 
